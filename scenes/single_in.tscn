@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmxcavrqw1gis"]
+
+[ext_resource type="Script" path="res://scr/single_input.gd" id="1_q1l8n"]
+[ext_resource type="Texture2D" uid="uid://daca35wb021pm" path="res://assets/input_left_endcap.svg" id="2_qyjnh"]
+[ext_resource type="Script" path="res://scr/tintable.gd" id="3_h1381"]
+[ext_resource type="Texture2D" uid="uid://by8r3h6knrt1p" path="res://assets/input_center.svg" id="3_juhey"]
+[ext_resource type="Texture2D" uid="uid://5v6bxdjljayo" path="res://assets/input_right_endcap.svg" id="4_dsfnn"]
+[ext_resource type="PackedScene" uid="uid://bp0muys1m0qqy" path="res://scenes/output_connector.tscn" id="5_hldya"]
+
+[node name="SingleInput" type="Area2D" node_paths=PackedStringArray("left_endcap", "right_endcap", "stretch", "collider")]
+script = ExtResource("1_q1l8n")
+width = 200
+left_endcap = NodePath("InputLeftEndcap")
+right_endcap = NodePath("InputRightEndcap")
+stretch = NodePath("InputCenter")
+collider = NodePath("AreaHitbox")
+collider_items = Array[int]([1, 2, 3])
+
+[node name="InputLeftEndcap" type="Sprite2D" parent="."]
+use_parent_material = true
+position = Vector2(-185, 0)
+texture = ExtResource("2_qyjnh")
+script = ExtResource("3_h1381")
+
+[node name="InputCenter" type="Sprite2D" parent="."]
+use_parent_material = true
+position = Vector2(-100, 0)
+texture = ExtResource("3_juhey")
+region_enabled = true
+region_rect = Rect2(0, 0, 140, 100)
+script = ExtResource("3_h1381")
+
+[node name="InputRightEndcap" type="Sprite2D" parent="."]
+use_parent_material = true
+position = Vector2(-15, 0)
+texture = ExtResource("4_dsfnn")
+script = ExtResource("3_h1381")
+
+[node name="AreaHitbox" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(-20, -50, -200, -50, -180, 0, -200, 50, -20, 50, 0, 0)
+
+[node name="OutputConnector" parent="." instance=ExtResource("5_hldya")]
+use_parent_material = true
+
+[connection signal="update_tint" from="." to="InputLeftEndcap" method="_set_tint"]
+[connection signal="update_tint" from="." to="InputCenter" method="_set_tint"]
+[connection signal="update_tint" from="." to="InputRightEndcap" method="_set_tint"]

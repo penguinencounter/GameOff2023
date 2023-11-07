@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://batt7ehcmfx1c"]
+
+[ext_resource type="Script" path="res://scr/input_connector.gd" id="1_xbb6a"]
+[ext_resource type="Texture2D" uid="uid://snnthbnwvy6m" path="res://assets/input_always.svg" id="2_kaa5g"]
+[ext_resource type="Texture2D" uid="uid://bc868ckakveba" path="res://assets/input_enabled.svg" id="3_xq5es"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i5c61"]
+radius = 8.0
+
+[node name="InputConnector" type="Area2D"]
+script = ExtResource("1_xbb6a")
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_i5c61")
+
+[node name="Always" type="Sprite2D" parent="."]
+texture = ExtResource("2_kaa5g")
+
+[node name="WhenConnected" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("3_xq5es")
+
+[node name="Anchor" type="Node2D" parent="."]
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]

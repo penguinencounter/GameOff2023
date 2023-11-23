@@ -1,37 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://bupgbtxelx4t1"]
+[gd_scene load_steps=5 format=3 uid="uid://bupgbtxelx4t1"]
 
 [ext_resource type="PackedScene" uid="uid://cmxcavrqw1gis" path="res://scenes/single_in.tscn" id="1_1hmmt"]
-[ext_resource type="Script" path="res://scr/reified_curve_2d.gd" id="1_qhwm6"]
+[ext_resource type="PackedScene" uid="uid://ccsw1lnx54qkd" path="res://scenes/world_scratchpad.tscn" id="1_mfuxu"]
 [ext_resource type="PackedScene" uid="uid://batt7ehcmfx1c" path="res://scenes/input_connector.tscn" id="2_33m6n"]
 [ext_resource type="PackedScene" uid="uid://bp0muys1m0qqy" path="res://scenes/output_connector.tscn" id="3_g1fey"]
 
-[sub_resource type="Curve2D" id="Curve2D_ed20k"]
-_data = {
-"points": PackedVector2Array(0, 0, 300, 0, 158, 440.6, -100, -300, 100, 0, 452, 287)
-}
-point_count = 2
-
-[sub_resource type="Curve2D" id="Curve2D_hgrpm"]
-_data = {
-"points": PackedVector2Array(0, 0, 300, 0, 198, 30, -300, 0, 0, 0, 295, 332)
-}
-point_count = 2
-
 [node name="Node2D" type="Node2D"]
+position = Vector2(0, -1)
 
-[node name="ExampleConnection1" type="Node2D" parent="."]
-script = ExtResource("1_qhwm6")
-curve = SubResource("Curve2D_ed20k")
-color = Color(0.721569, 0.654902, 1, 1)
-line_thickness = 16.0
-round = true
-
-[node name="ExampleConnection2" type="Node2D" parent="."]
-script = ExtResource("1_qhwm6")
-curve = SubResource("Curve2D_hgrpm")
-color = Color(1, 0.47451, 0.360784, 1)
-line_thickness = 16.0
-round = true
+[node name="WorldScratchpad" parent="." instance=ExtResource("1_mfuxu")]
 
 [node name="SingleInput" parent="." instance=ExtResource("1_1hmmt")]
 position = Vector2(704, 262)

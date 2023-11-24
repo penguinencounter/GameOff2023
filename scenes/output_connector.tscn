@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bp0muys1m0qqy"]
+[gd_scene load_steps=6 format=3 uid="uid://bp0muys1m0qqy"]
 
 [ext_resource type="Script" path="res://scr/output_connector.gd" id="1_qb368"]
 [ext_resource type="Texture2D" uid="uid://dx3fmswyche80" path="res://assets/output_always.svg" id="1_tm2ht"]
 [ext_resource type="Texture2D" uid="uid://b8jw8mxmcaoaq" path="res://assets/output_enabled.svg" id="2_gyve5"]
+[ext_resource type="Script" path="res://scr/position_change_notifier.gd" id="4_5dvrt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_i5c61"]
 radius = 8.0
@@ -22,3 +23,6 @@ visible = false
 texture = ExtResource("2_gyve5")
 
 [node name="Anchor" type="Node2D" parent="."]
+
+[node name="PCN" type="Node2D" parent="."]
+script = ExtResource("4_5dvrt")

@@ -128,6 +128,12 @@ var h := 0.0
 const s := 0.5
 
 
+# TODO: Temporary
+var lifetime := 0.0
+@onready var origin_y := position.y
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
+func _process(_delta: float):
+	if not Engine.is_editor_hint():
+		lifetime += _delta
+		position.y = origin_y + sin(lifetime * 5) * 50

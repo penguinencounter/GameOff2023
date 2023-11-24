@@ -26,12 +26,10 @@ var input_hovered := false
 
 
 func _mouse_enter():
-	print_debug("entered")
 	input_hovered = true
 
 
 func _mouse_exit():
-	print_debug("exited")
 	input_hovered = false
 
 

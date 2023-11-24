@@ -1,14 +1,14 @@
 extends Node2D
 
 
-var in_progress_base := Vector2.ZERO
-var in_progress: ReifiedCurve2D = null
+var in_progress_base: OutputConnector = null
+var in_progress: Cable = null
 const outgoing_control := Vector2(300, 0)
 const incoming_control := Vector2(-300, 0)
 
 ## Connections are... interesting.
 ##
-## Index with connections[from][to] -> ReifiedCurve2D (if it exists)
+## Index with connections[from][to] -> Cable (if it exists)
 var connections := {}
 
 
@@ -20,25 +20,30 @@ func destroy_in_progress():
 	in_progress = null
 
 
-func destroy(connection: ReifiedCurve2D):
+func destroy(connection: Cable):
 	remove_child(connection)
 	connection.queue_free()
+
+
+func get_PCN(connector: Node2D) -> PositionChangeNotifier:
+	return (connector.get_node("PCN") as PositionChangeNotifier)
 
 
 func _on_fail_connection():
 	destroy_in_progress()
 
 func _on_begin_connection(source: OutputConnector):
-	in_progress = ReifiedCurve2D.new()
+	in_progress = Cable.new()
 	in_progress.curve = Curve2D.new()
 	add_child(in_progress)
-	in_progress_base = to_local(source.global_position)
-	in_progress.curve.add_point(in_progress_base, Vector2.ZERO, outgoing_control)
-	in_progress.curve.add_point(in_progress_base, incoming_control, Vector2.ZERO)
+	in_progress_base = source
+	in_progress.curve.add_point(source.global_position, Vector2.ZERO, outgoing_control)
+	in_progress.curve.add_point(source.global_position, incoming_control, Vector2.ZERO)
+	in_progress.subscribe_left(source)
 
 func _on_successful_connection(from: OutputConnector, to: InputConnector):
 	destroy_in_progress()
-	var result := ReifiedCurve2D.new()
+	var result := Cable.new()
 	result.curve = Curve2D.new()
 	var from_p := to_local(from.global_position)
 	var to_p := to_local(to.global_position)
@@ -49,19 +54,21 @@ func _on_successful_connection(from: OutputConnector, to: InputConnector):
 		connections[from] = {}
 	var from_set := connections[from] as Dictionary
 	if from_set.has(to):  # this connection already exists???
-		destroy(connections[from][to] as ReifiedCurve2D)
-		connections[from].erase(to)
-	connections[from][to] = result
+		destroy(from_set[to] as Cable)
+		from_set.erase(to)
+	from_set[to] = result
+	
+	result.subscribe(from, to)
+
 	add_child(result)
 
 func _on_destroyed_connection(from: OutputConnector, to: InputConnector):
-	if not connections.has(from):
-		return
-	var from_set := connections[from] as Dictionary
-	if not from_set.has(to):
-		return
-	destroy(connections[from][to] as ReifiedCurve2D)
-	connections[from].erase(to)
+	if connections.has(from):
+		var from_set := connections[from] as Dictionary
+		if from_set.has(to):
+			destroy(from_set[to] as Cable)
+			from_set.erase(to)
+
 
 
 # Called when the node enters the scene tree for the first time.
